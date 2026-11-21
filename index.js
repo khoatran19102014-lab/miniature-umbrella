@@ -1,13 +1,14 @@
 const http = require('http');
 const https = require('https');
 
-const KEY = "123456";
+const KEY = "trackstatvip";
 let trackedUsers = {};
 
+// SỬ DỤNG RO-PROXY ĐỂ TRÁNH BỊ ROBLOX CHẶN IP TRÊN CLOUD
 function getRobloxUser(username, cb) {
   const data = JSON.stringify({ usernames: [username], excludeBannedUsers: false });
   const req = https.request({
-    hostname: '://roblox.com', path: '/v1/usernames/users', method: 'POST',
+    hostname: 'users.roproxy.com', path: '/v1/usernames/users', method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) }
   }, res => {
     let b = ''; res.on('data', c => b += c);
@@ -22,7 +23,7 @@ function checkPresence(ids, cb) {
   if (!ids.length) return cb([]);
   const data = JSON.stringify({ userIds: ids });
   const req = https.request({
-    hostname: '://roblox.com', path: '/v1/presence/users', method: 'POST',
+    hostname: 'presence.roproxy.com', path: '/v1/presence/users', method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) }
   }, res => {
     let b = ''; res.on('data', c => b += c);
@@ -128,7 +129,7 @@ const html = [
 '        </div>',
 '        <div class=\"add-account-bar\">',
 '            <div class=\"input-group\">',
-'                <input type=\"text\" id=\"uname\" placeholder=\"Nhập tên tài khoản hoặc ID...\">',
+'                <input type=\"text\" id=\"uname\" placeholder=\"Nhập tên tài khoản để theo dõi...\">',
 '                <button onclick=\"addAcc()\">Thêm Tài Khoản</button>',
 '            </div>',
 '            <div id=\"msg\" style=\"font-size:13px; color:#fbbf24; font-weight:500;\"></div>',
@@ -136,6 +137,3 @@ const html = [
 '        <table>',
 '            <thead>',
 '                <tr>',
-'                    <th>Account</th>',
-'                    <th>Game ID</th>',
-u.n
